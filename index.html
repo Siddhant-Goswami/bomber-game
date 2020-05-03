@@ -17,9 +17,10 @@
         border-right: 2px solid grey;
         padding: 15px;
         background-color: #b6b6b6;
-        width: 1vw;
-        height: 1vw;
-        font-size: 1em;
+
+        width:1vw;
+        height:1vw;
+        font-size:1em;
       }
       .col:hover {
         background-color: #dddddd;
@@ -93,15 +94,21 @@
                 while (bi < bombIndices.length) {
                   let bombcol = document.getElementById(bombIndices[bi]);
                   bombcol.classList.add("bomb");
-                  bombcol.innerHTML = "💣";
+
+                  bombcol.innerHTML = "💣"
+
                   bi++;
                 }
                 gameover = true;
               } else {
+
                 if (!gameover && !visited.includes(i + j * 9)) {
                   visited.push(i + j * 9);
+
+
                   let safeCol = document.getElementById(i + j * 9);
                   safeCol.classList.add("safe");
+                 safeCol.innerHTML=points;
                   points++;
                   pointer.innerHTML = points;
                   safeCol.innerHTML = points;
