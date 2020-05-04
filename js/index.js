@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 function playAgain() {
   window.location.reload();
 }
@@ -15,14 +16,54 @@ function generateBombIndicies(pCount, pMin, pMax) {
   }
   return resultArr;
 }
+function findNeighbourBombs(bombIndices, index, colCount, rowCount) {
+  let bombs = 0;
+  // positions
+  // |1|2|3|
+  // |4|x|5|
+  // |6|7|8|
+  if (index % colCount !== 1 && bombIndices.includes(index - colCount - 1)) {
+    bombs++;
+  }
+  if (index > colCount && bombIndices.includes(index - colCount)) {
+    bombs++;
+  }
+  if (index % colCount !== 0 && bombIndices.includes(index - colCount + 1)) {
+    bombs++;
+  }
+
+  if (index % colCount !== 1 && bombIndices.includes(index - 1)) {
+    bombs++;
+  }
+  if (index % colCount !== 0 && bombIndices.includes(index + 1)) {
+    bombs++;
+  }
+  if (index % colCount !== 1 && bombIndices.includes(index + colCount - 1)) {
+    bombs++;
+  }
+  if (
+    index <= colCount * (rowCount - 1) &&
+    bombIndices.includes(index + colCount)
+  ) {
+    bombs++;
+  }
+  if (index % colCount !== 0 && bombIndices.includes(index + colCount + 1)) {
+    bombs++;
+  }
+  return bombs;
+}
 function render() {
   const rowCount = 9;
   const colCount = 9;
+  const MIN = 1;
   let bi = 0;
   let points = 0;
   let gameover = false;
   let visited = [];
-  let bombIndices = generateBombIndicies(10, 1, 81);
+  let bombIndices = generateBombIndicies(  
+    rowCount,
+    MIN,
+    rowCount * colCount);
   let grid = document.querySelector(".grid");
   let pointer = document.querySelector(".points");
   pointer.innerHTML = points;
@@ -50,10 +91,15 @@ function render() {
             visited.push(i + j * 9);
             let safeCol = document.getElementById(i + j * 9);
             safeCol.classList.add("safe");
-            safeCol.innerHTML = points;
+            const neighbouringBombs = findNeighbourBombs(
+              bombIndices,
+              i + j * rowCount,
+              colCount,
+              rowCount
+            );
+            safeCol.innerHTML = neighbouringBombs;
             points++;
             pointer.innerHTML = points;
-            safeCol.innerHTML = points;
           }
         }
       });
